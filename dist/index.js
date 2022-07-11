@@ -12288,7 +12288,7 @@ const apiRequest = async (url, method = 'get', payload = undefined) => {
     method: method,
     url: `${API_V3_BASE}${url}`,
     headers: {
-      Authorization: `token ${GIT_APP_TOKEN}`,
+      Authorization: `Bearer ${GIT_APP_TOKEN}`,
     },
   };
   if (payload) {
