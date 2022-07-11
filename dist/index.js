@@ -12273,8 +12273,11 @@ const axios = __nccwpck_require__(6545);
 const core = __nccwpck_require__(2186);
 const simpleGit = __nccwpck_require__(9103);
 const path = __nccwpck_require__(1017);
-const { GITHUB_REPOSITORY, GIT_APP_TOKEN } =
-  process.env;
+const {
+  GITHUB_REPOSITORY,
+  GIT_APP_TOKEN,
+  GITHUB_REF_NAME = 'master',
+} = process.env;
 const API_V3_BASE = 'https://api.github.com';
 
 const baseDir = path.join(process.cwd(), core.getInput('cwd') || '');
@@ -12300,10 +12303,10 @@ const apiRequest = async (url, method = 'get', payload = undefined) => {
  * @returns protections
  */
 const removeBranchProtection = async () => {
-  const url = `/repos/${GITHUB_REPOSITORY}/branches/master/protection`;
+  const url = `/repos/${GITHUB_REPOSITORY}/branches/${GITHUB_REF_NAME}/protection`;
 
   core.info('Looking for current branch protection rules.');
-  
+
   const data = await apiRequest(url);
   const payload = {
     dismiss_stale_reviews: data?.dismiss_stale_reviews,
@@ -12336,7 +12339,7 @@ const removeBranchProtection = async () => {
  * @param {*} payload
  */
 const addBranchProtection = async (payload) => {
-  const url = `/repos/${GITHUB_REPOSITORY}/branches/master/protection/required_pull_request_reviews`;
+  const url = `/repos/${GITHUB_REPOSITORY}/branches/${GITHUB_REF_NAME}/protection`;
   core.info('Re-adding protection branch rules.');
   core.info(url);
   await apiRequest(url, 'patch', payload);
@@ -12347,15 +12350,14 @@ const addBranchProtection = async (payload) => {
  */
 const gitAddAndCommit = async () => {
   core.info('Pushing to remote Github.');
-  await git
-    .addConfig(
-      'user.email',
-      '41898282+github-actions[bot]@users.noreply.github.com'
-    )
-    .addConfig('user.name', 'github-actions[bot]');
+  const email =
+    core.getInput('email') || 'github-actions[bot]@users.noreply.github.com';
+  const name = core.getInput('name') || 'github-actions[bot]';
+  const message = core.getInput('message') || 'Updated by Github Actions :)';
+  await git.addConfig('user.email', email).addConfig('user.name', name);
   await git.add('.');
-  await git.commit('Updated by Github Actions :)');
-  await git.push('origin', 'master');
+  await git.commit(message);
+  await git.push('origin', GITHUB_REF_NAME);
 };
 
 const main = async () => {
