@@ -17,7 +17,7 @@ const apiRequest = async (url, method = 'get', payload = undefined) => {
     method: method,
     url: `${API_V3_BASE}${url}`,
     headers: {
-      Authorization: `Bearer ${GIT_APP_TOKEN}`,
+      Authorization: `token ${GIT_APP_TOKEN}`,
     },
   };
   if (payload) {
@@ -71,7 +71,7 @@ const addBranchProtection = async (payload) => {
   const url = `/repos/${GITHUB_REPOSITORY}/branches/${GITHUB_REF_NAME}/protection`;
   core.info('Re-adding protection branch rules.');
   core.info(url);
-  await apiRequest(url, 'patch', payload);
+  await apiRequest(url, 'put', payload);
 };
 
 /**
