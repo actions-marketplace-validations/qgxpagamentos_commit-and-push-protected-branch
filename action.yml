@@ -5,15 +5,15 @@ inputs:
   name:
     description: "Git username"
     required: false
-    default: ""
+    default: "github-actions[bot]"
   email:
     description: "Git e-mail"
     required: false
-    default: ""
+    default: "github-actions[bot]@users.noreply.github.com"
   message:
     description: "Git message"
     required: false
-    default: ""
+    default: "Updated by Github Actions :)"
 runs:
   using: "node16"
   main: "dist/index.js"

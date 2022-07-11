@@ -12284,6 +12284,8 @@ const baseDir = path.join(process.cwd(), core.getInput('cwd') || '');
 const git = simpleGit({ baseDir });
 
 const apiRequest = async (url, method = 'get', payload = undefined) => {
+  core.info(url);
+  core.info(method);
   const config = {
     method: method,
     url: `${API_V3_BASE}${url}`,
@@ -12304,8 +12306,8 @@ const apiRequest = async (url, method = 'get', payload = undefined) => {
  */
 const removeBranchProtection = async () => {
   const url = `/repos/${GITHUB_REPOSITORY}/branches/${GITHUB_REF_NAME}/protection`;
-
   core.info('Looking for current branch protection rules.');
+  core.info(url);
 
   const data = await apiRequest(url);
   const payload = {
@@ -12341,7 +12343,6 @@ const removeBranchProtection = async () => {
 const addBranchProtection = async (payload) => {
   const url = `/repos/${GITHUB_REPOSITORY}/branches/${GITHUB_REF_NAME}/protection`;
   core.info('Re-adding protection branch rules.');
-  core.info(url);
   await apiRequest(url, 'put', payload);
 };
 
