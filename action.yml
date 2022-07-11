@@ -1,0 +1,22 @@
+name: "commit-and-push-protected-branch"
+author: "QGX Pagamentos"
+description: "Commit to protected branch"
+inputs:
+  name:
+    description: "Git username"
+    required: false
+    default: ""
+  email:
+    description: "Git e-mail"
+    required: false
+    default: ""
+  message:
+    description: "Git message"
+    required: false
+    default: ""
+runs:
+  using: "node16"
+  main: "dist/index.js"
+branding:
+  icon: "list"
+  color: "purple"

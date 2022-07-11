@@ -1,0 +1,31 @@
+{
+  "name": "commit-and-push-protected-branch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node_modules/.bin/ncc build src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qgxpagamentos/commit-and-push-protected-branch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qgxpagamentos/commit-and-push-protected-branch/issues"
+  },
+  "keywords": [
+    "action",
+    "github",
+    "branch",
+    "protected"
+  ],
+  "author": "QGX Pagamentos",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.9.0",
+    "@actions/github": "^5.0.3",
+    "@vercel/ncc": "^0.34.0",
+    "axios": "^0.27.2",
+    "simple-git": "^3.10.0"
+  }
+}
