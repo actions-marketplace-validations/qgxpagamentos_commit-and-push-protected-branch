@@ -12284,8 +12284,7 @@ const baseDir = path.join(process.cwd(), core.getInput('cwd') || '');
 const git = simpleGit({ baseDir });
 
 const apiRequest = async (url, method = 'get', payload = undefined) => {
-  core.info(url);
-  core.info(method);
+  core.info(`${method} - ${url}`);
   const config = {
     method: method,
     url: `${API_V3_BASE}${url}`,
@@ -12307,13 +12306,21 @@ const apiRequest = async (url, method = 'get', payload = undefined) => {
 const removeBranchProtection = async () => {
   const url = `/repos/${GITHUB_REPOSITORY}/branches/${GITHUB_REF_NAME}/protection`;
   core.info('Looking for current branch protection rules.');
-  core.info(url);
 
   const data = await apiRequest(url);
   const payload = {
-    dismiss_stale_reviews: data?.dismiss_stale_reviews,
-    require_code_owner_reviews: data?.require_code_owner_reviews,
-    required_approving_review_count: data?.required_approving_review_count,
+    required_status_checks: null,
+    enforce_admins: false,
+    required_pull_request_reviews: {
+      dismiss_stale_reviews: data?.dismiss_stale_reviews,
+      require_code_owner_reviews: data?.require_code_owner_reviews,
+      required_approving_review_count: data?.required_approving_review_count,
+    },
+    restrictions: {
+      users: [''],
+      teams: [''],
+      apps: [''],
+    },
   };
 
   const repos = await apiRequest(`/repos/${GITHUB_REPOSITORY}`);
